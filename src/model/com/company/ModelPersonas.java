@@ -1,6 +1,6 @@
 package model.com.company;
 
-import Connecion.ConectionBD;
+import Connection.ConectionBD;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
@@ -42,6 +42,4 @@ public class ModelPersonas {
         }
         return m;
     }
-
-
 }

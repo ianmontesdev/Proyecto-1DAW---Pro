@@ -1,4 +1,4 @@
-package Controler.com.company;
+package Controller.com.company;
 
 import view.com.company.ViewEntrada;
 
@@ -21,6 +21,7 @@ public class ControllerEntrada {
         try {
             TimeUnit.SECONDS.sleep(3);
             frEntrada.dispose();
+            new ControllerPersonas();
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }
