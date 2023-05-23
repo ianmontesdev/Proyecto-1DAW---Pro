@@ -9,13 +9,13 @@ import java.sql.Statement;
 
 public class ModelPersonas {
 
-    private Statement stmt;
+    private static Statement stmt;
 
     public ModelPersonas() {
         ConectionBD.openConn();
     }
 
-    public DefaultTableModel CargaDatos(DefaultTableModel m) {
+    public static DefaultTableModel CargaDatos(DefaultTableModel m) {
         String[] titulos = {"NIF", "Nombre", "Apellido1", "Apellido2", "Ciudad", "Dirección", "Teléfono", "Fecha Nacimiento", "Sexo", "Tipo"};
         m = new DefaultTableModel(null, titulos);
 
@@ -41,5 +41,9 @@ public class ModelPersonas {
 
         }
         return m;
+    }
+
+    public Statement getStmt() {
+        return stmt;
     }
 }

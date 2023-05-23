@@ -10,8 +10,13 @@ public class ViewPersonas extends JFrame {
     private JTable table1;
     private JButton personasButton;
     private JButton asignaturasButton;
-    private JTextField textField1;
+    private JTextField campoBusqueda;
+    private JScrollPane ScrollPane;
     JPopupMenu popupMenu = new JPopupMenu();
+
+    private JMenuItem menuAniadir = new JMenuItem("Añadir nueva persona");
+    private JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
+    private JMenuItem menuEditar = new JMenuItem("Guardar cambios");
 
     public ViewPersonas(){
         super("Gestor universidad");
@@ -21,13 +26,9 @@ public class ViewPersonas extends JFrame {
         setSize(ancho, alto);
         setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2 - (ancho/2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2 - (alto/2)));
 
-        JMenuItem menuItemAdd = new JMenuItem("Añadir nueva persona");
-        JMenuItem menuItemRemove = new JMenuItem("Eliminar de la BBDD");
-        JMenuItem menuItemRemoveAll = new JMenuItem("Editar");
-
-        popupMenu.add(menuItemAdd);
-        popupMenu.add(menuItemRemove);
-        popupMenu.add(menuItemRemoveAll);
+        popupMenu.add(menuAniadir);
+        popupMenu.add(menuEditar);
+        popupMenu.add(menuEliminar);
         table1.setComponentPopupMenu(popupMenu);
     }
 
@@ -77,5 +78,25 @@ public class ViewPersonas extends JFrame {
 
     public void setAsignaturasButton(JButton asignaturasButton) {
         this.asignaturasButton = asignaturasButton;
+    }
+
+    public JMenuItem getMenuAniadir() {
+        return menuAniadir;
+    }
+
+    public JMenuItem getMenuEliminar() {
+        return menuEliminar;
+    }
+
+    public JMenuItem getMenuEditar() {
+        return menuEditar;
+    }
+
+    public JTextField getCampoBusqueda() {
+        return campoBusqueda;
+    }
+
+    public void setCampoBusqueda(JTextField campoBusqueda) {
+        this.campoBusqueda = campoBusqueda;
     }
 }

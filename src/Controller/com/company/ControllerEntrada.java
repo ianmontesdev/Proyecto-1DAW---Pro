@@ -2,10 +2,13 @@ package Controller.com.company;
 
 import view.com.company.ViewEntrada;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.concurrent.TimeUnit;
 
 public class ControllerEntrada {
     private final ViewEntrada frEntrada = new ViewEntrada();
+    private JButton botonDobleClick = new JButton();
 
     public ControllerEntrada(){
         iniciarVentana();
@@ -27,5 +30,4 @@ public class ControllerEntrada {
         }
 
     }
-
 }
