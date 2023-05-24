@@ -10,7 +10,7 @@ public class ControllerEntrada {
     private final ViewEntrada frEntrada = new ViewEntrada();
     private JButton botonDobleClick = new JButton();
 
-    public ControllerEntrada(){
+    public ControllerEntrada() {
         iniciarVentana();
         iniciarApp();
     }
