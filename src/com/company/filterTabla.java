@@ -1,9 +1,5 @@
 package com.company;
 
-import view.com.company.ViewAsignaturas;
-import view.com.company.ViewPersonas;
-
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 public class filterTabla {

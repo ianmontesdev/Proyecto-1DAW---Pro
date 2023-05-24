@@ -74,44 +74,61 @@ public class ControllerPersonas implements ActionListener{
         String consulta = "DELETE FROM `persona` WHERE `persona`.`nif` = " + "'" + nif+ "'";
         stmt = ConectionBD.getStmt();
         stmt.executeUpdate(consulta);
-        ModelPersonas persona = new ModelPersonas();
-        frPersonas.getTable1().setModel(persona.CargaDatos(m));
+        prepararBaseDatos();
         esNuevaEntrada = false;
+        JOptionPane.showMessageDialog(null, "El usuario con nif " + nif + " fue eliminado con éxito");
     }
     private void actualizarEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
+        try{
+            if (telefono.isEmpty()){
+                telefono = null;
+            }
+        } catch (NullPointerException e){
+            telefono = null;
+        }
+        try{
+            if (apellido2.isEmpty()){
+                apellido2 = null;
+            }
+        } catch (NullPointerException e){
+            apellido2 = null;
+        }
+
         String consulta = "UPDATE `persona`" +
                 "SET `nombre` = '" + nombre + "', " +
                 "`apellido1` = '" + apellido1 + "', " +
-                "`apellido2` = '" + apellido2 + "', " +
+                "`apellido2` = " + apellido2 + ", " +
                 "`ciudad` = '" + ciudad + "', " +
                 "`direccion` = '" + direccion + "', " +
-                "`telefono` = '" + telefono + "', " +
+                "`telefono` = " + telefono + ", " +
                 "`fecha_nacimiento` = '" + fechaN + "', " +
                 "`sexo` = '" + sexo + "', " +
                 "`tipo` = '" + tipo + "'" +
                 "WHERE `persona`.`nif` = " + "'" + nif+ "'";
 
-
-        if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo)){
+        if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)){
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
-            ModelPersonas persona = new ModelPersonas();
-            frPersonas.getTable1().setModel(persona.CargaDatos(m));
+            prepararBaseDatos();
         }
     }
 
     private void aniadirColumna(){
         DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
-        tabla.addRow(new String[]{"38856774E", "Ian", "Montes", "Tirado", "Las Palmas", "C/Farmaceutico", "625875964", "1992-04-09", "H", "alumno"});
+        tabla.addRow(new String[]{"", "", "", "", "", "", "", "", "", ""});
         esNuevaEntrada = true;
     }
 
     private void aniadirEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
+
+        if(telefono.length() == 0){ telefono = null;};
+        if(apellido2.length() == 0){ apellido2 = null;}
+
         String consulta = "INSERT INTO `persona` " +
                 "(`nif`, `nombre`, `apellido1`, `apellido2`, `ciudad`, `direccion`, `telefono`, `fecha_nacimiento`, `sexo`, `tipo`) " +
-                "VALUES ('"+ nif + "', '"+ nombre +"', '"+ apellido1 +"', '"+ apellido2 +"', '"+ ciudad +"', '"+ direccion +"', '"+ telefono +"', '"+ fechaN +"', '"+ sexo +"', '"+ tipo +"')";
+                "VALUES ('"+ nif + "', '"+ nombre +"', '"+ apellido1 +"', "+ apellido2 +", '"+ ciudad +"', '"+ direccion +"', "+ telefono +", '"+ fechaN +"', '"+ sexo +"', '"+ tipo +"')";
 
-        if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo)){
+        if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)){
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
             ModelPersonas persona = new ModelPersonas();
@@ -138,43 +155,41 @@ public class ControllerPersonas implements ActionListener{
                 aniadirColumna();
                 break;
             case "Eliminar de la BBDD":
-                System.out.println();
                 try {
                     eliminarEntrada(frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0).toString());
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                System.out.println("Eliminar de la BBDD");
                 break;
             case "Guardar cambios":
 
                 if (esNuevaEntrada && frPersonas.getTable1().getSelectedRow() == (frPersonas.getTable1().getRowCount()-1)){
                     try {
-                        aniadirEntrada(frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9).toString());
+                        aniadirEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9));
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else {
                     try {
-                        actualizarEntrada(frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8).toString(),
-                                frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9).toString());
+                        actualizarEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9));
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -182,5 +197,6 @@ public class ControllerPersonas implements ActionListener{
                 System.out.println("Editado");
                 break;
         }
+
     }
 }
