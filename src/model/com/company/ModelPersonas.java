@@ -42,8 +42,4 @@ public class ModelPersonas {
         }
         return m;
     }
-
-    public Statement getStmt() {
-        return stmt;
-    }
 }

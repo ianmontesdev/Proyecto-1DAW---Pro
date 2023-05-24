@@ -5,13 +5,14 @@ import javax.swing.*;
 public class ViewAsignaturas extends JFrame {
     private JPanel ViewAsignaturas;
     private JTable table1;
-    private JPanel ViewPersonas;
-    private JPanel panelContainer;
     private JButton personasButton;
     private JButton asignaturasButton;
-    private JTextField textField1;
-
+    private JTextField CampoBusqueda;
     JPopupMenu popupMenu = new JPopupMenu();
+
+    private JMenuItem menuAniadir = new JMenuItem("Añadir nueva asignatura");
+    private JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
+    private JMenuItem menuEditar = new JMenuItem("Guardar cambios");
 
     public ViewAsignaturas(){
         super("Gestor universidad");
@@ -21,61 +22,26 @@ public class ViewAsignaturas extends JFrame {
         setSize(ancho, alto);
         setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2 - (ancho/2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2 - (alto/2)));
 
-        JMenuItem menuItemAdd = new JMenuItem("Añadir nueva Asignatura");
-        JMenuItem menuItemRemove = new JMenuItem("Eliminar de la BBDD");
-        JMenuItem menuItemRemoveAll = new JMenuItem("Editar");
-
-        popupMenu.add(menuItemAdd);
-        popupMenu.add(menuItemRemove);
-        popupMenu.add(menuItemRemoveAll);
+        popupMenu.add(menuAniadir);
+        popupMenu.add(menuEliminar);
+        popupMenu.add(menuEditar);
         table1.setComponentPopupMenu(popupMenu);
     }
-
-    public JTable getTable1() {
-        return table1;
-    }
-
-    public void setTable1(JTable table1) {
-        this.table1 = table1;
-    }
-
-    public JPanel getViewPersonas() {
-        return ViewPersonas;
-    }
-
-    public void setViewPersonas(JPanel viewPersonas) {
-        ViewPersonas = viewPersonas;
-    }
-
-    public JPanel getPanelContainer() {
-        return panelContainer;
-    }
-
-    public void setPanelContainer(JPanel panelContainer) {
-        this.panelContainer = panelContainer;
-    }
+    public JTable getTable1() {return table1;}
 
     public JButton getPersonasButton() {
         return personasButton;
-    }
-
-    public void setPersonasButton(JButton personasButton) {
-        this.personasButton = personasButton;
     }
 
     public JButton getAsignaturasButton() {
         return asignaturasButton;
     }
 
-    public void setAsignaturasButton(JButton asignaturasButton) {
-        this.asignaturasButton = asignaturasButton;
-    }
+    public JMenuItem getMenuAniadir() {return menuAniadir;}
 
-    public JTextField getTextField1() {
-        return textField1;
-    }
+    public JMenuItem getMenuEliminar() {return menuEliminar;}
 
-    public void setTextField1(JTextField textField1) {
-        this.textField1 = textField1;
-    }
+    public JMenuItem getMenuEditar() {return menuEditar;}
+
+    public JTextField getCampoBusqueda() {return CampoBusqueda;}
 }

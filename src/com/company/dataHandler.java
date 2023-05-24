@@ -1,6 +1,7 @@
 package com.company;
 
 import Controller.com.company.ControllerPersonas;
+import view.com.company.ViewAsignaturas;
 import view.com.company.ViewPersonas;
 
 import javax.swing.*;
@@ -8,6 +9,8 @@ import java.util.Arrays;
 
 public class dataHandler {
     private static boolean resultado;
+
+    //TODO Añadir comprobaciones para datos de asignaturas
     public static boolean ComprobarDatosPersona(String dni, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo, ViewPersonas frPersonas){
         resultado = true;
         comprobarDNI(dni, frPersonas);
@@ -18,6 +21,12 @@ public class dataHandler {
         comprobarTipo(tipo);
         return resultado;
     }
+
+    public static boolean ComprobarDatosAsignaturas(ViewAsignaturas frAsignaturas){
+        resultado = true;
+
+        return resultado;
+    }
     
     private static void comprobarDNI(String dni, ViewPersonas frPersonas){
         char[] letra = {'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
@@ -26,8 +35,8 @@ public class dataHandler {
             if (valor >= 0 && valor <= 22 && dni.length() == 9){
                 if (dni.charAt(dni.length()-1) == letra[valor]){
                     for (int i = 0; i <frPersonas.getTable1().getRowCount(); i++) {
-                        if(frPersonas.getTable1().getValueAt(i, 0) == dni){
-                            if(frPersonas.getTable1().getSelectedRow() != i){
+                        if(frPersonas.getTable1().getValueAt(i, 0).equals(dni)){
+                            if( frPersonas.getTable1().getSelectedRow() != i){
                                 throw new NumberFormatException("El DNI introducido ya se encuentra en el sistema");
                             }
                         }

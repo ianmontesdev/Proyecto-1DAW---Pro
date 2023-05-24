@@ -89,6 +89,8 @@ public class ControllerPersonas implements ActionListener{
         try{
             if (apellido2.isEmpty()){
                 apellido2 = null;
+            } else{
+                apellido2 = "'" + apellido2 + "'";
             }
         } catch (NullPointerException e){
             apellido2 = null;
@@ -179,6 +181,7 @@ public class ControllerPersonas implements ActionListener{
                         throw new RuntimeException(ex);
                     }
                 } else {
+                    System.out.println((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3));
                     try {
                         actualizarEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
                                 (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
