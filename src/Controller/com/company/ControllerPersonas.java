@@ -110,6 +110,7 @@ public class ControllerPersonas implements ActionListener {
                 "`tipo` = '" + tipo + "'" +
                 "WHERE `persona`.`nif` = " + "'" + nif + "'";
 
+
         if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
@@ -190,7 +191,6 @@ public class ControllerPersonas implements ActionListener {
                         throw new RuntimeException(ex);
                     }
                 } else {
-                    System.out.println((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3));
                     try {
                         actualizarEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
                                 (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
@@ -206,7 +206,6 @@ public class ControllerPersonas implements ActionListener {
                         throw new RuntimeException(ex);
                     }
                 }
-                System.out.println("Editado");
                 break;
         }
 

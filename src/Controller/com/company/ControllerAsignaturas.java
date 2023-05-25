@@ -85,7 +85,7 @@ public class ControllerAsignaturas implements ActionListener {
     }
 
     //TODO Modificar actualizarEntrada para que funcione con asignaturas
-    private void actualizarEntrada(String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
+    private void actualizarEntrada(String id, String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
         try {
             if (id_profesor.isEmpty()) {
                 id_profesor = null;
@@ -102,9 +102,10 @@ public class ControllerAsignaturas implements ActionListener {
                 "`cuatrimestre` = '" + cuatrimestre + "', " +
                 "`id_profesor` = " + id_profesor + ", " +
                 "`id_grado` = '" + id_grado + "' " +
-                "WHERE `asignatura`.`id` = 1";
+                "WHERE `asignatura`.`id` = " + id;
 
         if (dataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
+            System.out.println(consulta);
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
             prepararBaseDatos();
@@ -114,7 +115,7 @@ public class ControllerAsignaturas implements ActionListener {
     //TODO Contar cuántas columnas tiene asignaturas para modificar el String[]
     private void aniadirColumna() {
         DefaultTableModel tabla = (DefaultTableModel) frAsignaturas.getTable1().getModel();
-        tabla.addRow(new String[]{"", "", "", "", "", "", "", "", "", ""});
+        tabla.addRow(new String[]{"Autogenerable", "", "", "", "", "", "", "", "", ""});
         esNuevaEntrada = true;
     }
 
@@ -123,7 +124,7 @@ public class ControllerAsignaturas implements ActionListener {
 
         if (id_profesor.length() == 0) {
             id_profesor = null;
-        }
+        } else {id_profesor = "'" + id_profesor + "'";}
         ;
 
         String consulta = "INSERT INTO `asignatura`" +
@@ -133,8 +134,7 @@ public class ControllerAsignaturas implements ActionListener {
         if (dataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
-            ModelPersonas persona = new ModelPersonas();
-            frAsignaturas.getTable1().setModel(persona.CargaDatos(m));
+            prepararBaseDatos();
             esNuevaEntrada = false;
         }
 
@@ -178,9 +178,9 @@ public class ControllerAsignaturas implements ActionListener {
                         throw new RuntimeException(ex);
                     }
                 } else {
-                    System.out.println((String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 3));
                     try {
-                        actualizarEntrada((String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 1),
+                        actualizarEntrada((String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 0),
+                                (String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 1),
                                 (String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 2),
                                 (String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 3),
                                 (String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 4),
@@ -191,7 +191,6 @@ public class ControllerAsignaturas implements ActionListener {
                         throw new RuntimeException(ex);
                     }
                 }
-                System.out.println("Editado");
                 break;
         }
     }

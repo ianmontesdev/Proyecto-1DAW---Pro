@@ -26,8 +26,8 @@ public class dataHandler {
         comprobarNombreAsignatura(nombre);
         comprobarCreditosAsignatura(creditos);
         comprobarTipoAsignatura(tipo);
-        comprobarCursoAsignatura(curso);
-        comprobarCuatrimestreAsignatura(cuatrimestre);
+        comprobarTinyIntAsignatura(curso, "Curso");
+        comprobarTinyIntAsignatura(cuatrimestre, "Cuatrimestre");
         comprobarIdProfesorAsignatura(id_profesor);
         comprobarIdGradoAsignatura(id_grado);
         return resultado;
@@ -144,8 +144,8 @@ public class dataHandler {
     private static void comprobarIdProfesorAsignatura(String id_profesor){
         if(id_profesor != null){
             try{
-                if (id_profesor.length() == 10){
-                    Integer.parseInt(id_profesor);
+                if (id_profesor.length() <= 10){
+                    Integer.parseInt(id_profesor.substring(1, id_profesor.length()-1));
                 }else {
                     throw new NumberFormatException("id inválida");
                 }
@@ -173,25 +173,14 @@ public class dataHandler {
         }
     }
 
-    private static void comprobarCursoAsignatura(String curso){
+    private static void comprobarTinyIntAsignatura(String curso, String campo){
         try{
-            if (curso.length() <= 3){
-                Integer.parseInt(curso);
-            } else {throw new NumberFormatException();}
+            if (Integer.parseInt(curso) <= 0 || Integer.parseInt(curso) >= 255){
+                throw new NumberFormatException();
+            }
         } catch (NumberFormatException e) {
             resultado = false;
-            JOptionPane.showMessageDialog(null, "Curso debe ser un entero de máximo 3 caracteres");
-        }
-    }
-
-    private static void comprobarCuatrimestreAsignatura(String cuatrimestre){
-        try{
-            if (cuatrimestre.length() <= 3){
-                Integer.parseInt(cuatrimestre);
-            } else {throw new NumberFormatException();}
-        } catch (NumberFormatException e) {
-            resultado = false;
-            JOptionPane.showMessageDialog(null, "Cuatrimestre debe ser un entero de máximo 3 caracteres");
+            JOptionPane.showMessageDialog(null, campo + " debe ser un entero de entre 0 y 255");
         }
     }
 
