@@ -4,9 +4,11 @@ import view.com.company.ViewAsignaturas;
 import view.com.company.ViewPersonas;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-public class dataHandler {
+public class DataHandler {
     private static boolean resultado;
 
     //TODO Añadir comprobaciones para datos de asignaturas
@@ -86,16 +88,9 @@ public class dataHandler {
     }
 
     private static void comprobarFechaPersona(String fechaN){
-        String[] fechaFormat = fechaN.split("-");
         try{
-            if (fechaFormat[0].length() == 4 && fechaFormat[1].length() == 2 && fechaFormat[2].length() == 2){
-                    Integer.parseInt(fechaFormat[0]);
-                    Integer.parseInt(fechaFormat[1]);
-                    Integer.parseInt(fechaFormat[2]);
-            } else {
-                throw new NumberFormatException("Fecha inválida");
-            }
-        } catch (NumberFormatException e){
+            LocalDate.parse(fechaN);
+        } catch(DateTimeParseException e) {
             JOptionPane.showMessageDialog(null, "La fecha no es válida");
             resultado = false;
         }

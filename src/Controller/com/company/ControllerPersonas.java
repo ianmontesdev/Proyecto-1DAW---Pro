@@ -1,8 +1,8 @@
 package Controller.com.company;
 
 import Connection.ConectionBD;
-import com.company.filterTabla;
-import com.company.dataHandler;
+import com.company.FilterTabla;
+import com.company.DataHandler;
 import model.com.company.ModelPersonas;
 import view.com.company.ViewPersonas;
 
@@ -26,6 +26,7 @@ public class ControllerPersonas implements ActionListener {
         iniciarEventos();
         prepararBaseDatos();
     }
+
 
     public void iniciarVentana() {
         frPersonas.setVisible(true);
@@ -51,24 +52,23 @@ public class ControllerPersonas implements ActionListener {
                 prepararBaseDatos();
                 actualizarFiltro(frPersonas.getCampoBusqueda().getText());
             }
-
             @Override
             public void changedUpdate(DocumentEvent e) {
-                prepararBaseDatos();
                 actualizarFiltro(frPersonas.getCampoBusqueda().getText());
             }
         });
     }
 
+
     private void actualizarFiltro(String input) {
         String filtro = frPersonas.getCampoBusqueda().getText();
         DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
-        filterTabla.filtrarTabla(input, tabla);
+        FilterTabla.filtrarTabla(input, tabla);
     }
 
     public void prepararBaseDatos() {
-        ModelPersonas entrada = new ModelPersonas();
-        frPersonas.getTable1().setModel(entrada.CargaDatos(m));
+        //ModelPersonas entrada = new ModelPersonas();
+        frPersonas.getTable1().setModel(ModelPersonas.CargaDatos(m));
     }
 
     private void eliminarEntrada(String nif) throws SQLException {
@@ -81,6 +81,7 @@ public class ControllerPersonas implements ActionListener {
     }
 
     private void actualizarEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
+
         try {
             if (telefono.isEmpty()) {
                 telefono = null;
@@ -111,17 +112,15 @@ public class ControllerPersonas implements ActionListener {
                 "WHERE `persona`.`nif` = " + "'" + nif + "'";
 
 
-        if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
-            stmt = ConectionBD.getStmt();
-            stmt.executeUpdate(consulta);
-            prepararBaseDatos();
+        if (DataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
+                stmt = ConectionBD.getStmt();
+                stmt.executeUpdate(consulta);
+                prepararBaseDatos();
         }
     }
-
     private void aniadirColumna() {
         DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
         tabla.addRow(new String[]{"", "", "", "", "", "", "", "", "", ""});
-        esNuevaEntrada = true;
     }
 
     private void aniadirEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
@@ -140,7 +139,8 @@ public class ControllerPersonas implements ActionListener {
                 "(`nif`, `nombre`, `apellido1`, `apellido2`, `ciudad`, `direccion`, `telefono`, `fecha_nacimiento`, `sexo`, `tipo`) " +
                 "VALUES ('" + nif + "', '" + nombre + "', '" + apellido1 + "', " + apellido2 + ", '" + ciudad + "', '" + direccion + "', " + telefono + ", '" + fechaN + "', '" + sexo + "', '" + tipo + "')";
 
-        if (dataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
+        JOptionPane.showMessageDialog(null, consulta);
+        if (DataHandler.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
             ModelPersonas persona = new ModelPersonas();
@@ -156,10 +156,12 @@ public class ControllerPersonas implements ActionListener {
 
         switch (entrada) {
             case "Personas":
+                esNuevaEntrada = false;
                 ModelPersonas persona = new ModelPersonas();
                 frPersonas.getTable1().setModel(persona.CargaDatos(m));
                 break;
             case "Asignaturas":
+                esNuevaEntrada = false;
                 new ControllerAsignaturas();
                 frPersonas.dispose();
                 break;
@@ -178,8 +180,8 @@ public class ControllerPersonas implements ActionListener {
                 if (esNuevaEntrada && frPersonas.getTable1().getSelectedRow() == (frPersonas.getTable1().getRowCount() - 1)) {
                     try {
                         aniadirEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2),
                                 (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
+                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2),
                                 (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3),
                                 (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4),
                                 (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5),

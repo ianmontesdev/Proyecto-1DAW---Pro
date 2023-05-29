@@ -1,10 +1,9 @@
 package Controller.com.company;
 
 import Connection.ConectionBD;
-import com.company.filterTabla;
-import com.company.dataHandler;
+import com.company.FilterTabla;
+import com.company.DataHandler;
 import model.com.company.ModelAsignaturas;
-import model.com.company.ModelPersonas;
 import view.com.company.ViewAsignaturas;
 
 import javax.swing.*;
@@ -66,7 +65,7 @@ public class ControllerAsignaturas implements ActionListener {
     private void actualizarFiltro(String input) {
         String filtro = frAsignaturas.getCampoBusqueda().getText();
         DefaultTableModel tabla = (DefaultTableModel) frAsignaturas.getTable1().getModel();
-        filterTabla.filtrarTabla(input, tabla);
+        FilterTabla.filtrarTabla(input, tabla);
     }
 
     public void prepararBaseDatos() {
@@ -104,7 +103,7 @@ public class ControllerAsignaturas implements ActionListener {
                 "`id_grado` = '" + id_grado + "' " +
                 "WHERE `asignatura`.`id` = " + id;
 
-        if (dataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
+        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
             System.out.println(consulta);
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
@@ -131,7 +130,7 @@ public class ControllerAsignaturas implements ActionListener {
                 "(`nombre`, `creditos`, `tipo`, `curso`, `cuatrimestre`, `id_profesor`, `id_grado`)" +
                 "VALUES ('" + nombre + "','" + creditos + "','" + tipo + "','" + curso + "','" + cuatrimestre + "'," + id_profesor + ",'" + id_grado + "')";
 
-        if (dataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
+        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
             prepararBaseDatos();
