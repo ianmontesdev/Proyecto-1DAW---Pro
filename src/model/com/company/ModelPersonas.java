@@ -13,14 +13,14 @@ public class ModelPersonas {
 
     public ModelPersonas() {
         ConectionBD.openConn();
+        stmt =ConectionBD.getStmt();
     }
 
     public static DefaultTableModel CargaDatos(DefaultTableModel m) {
         String[] titulos = {"NIF", "Nombre", "Apellido1", "Apellido2", "Ciudad", "Dirección", "Teléfono", "Fecha Nacimiento", "Sexo", "Tipo"};
         m = new DefaultTableModel(null, titulos);
-
         try {
-            stmt = ConectionBD.getStmt();
+            Statement stmt = ConectionBD.getStmt();
             ResultSet rs = stmt.executeQuery("select * from persona");
             String[] fila = new String[10];
 
@@ -38,8 +38,12 @@ public class ModelPersonas {
                 m.addRow(fila);
             }
         } catch (SQLException e) {
-
+            throw new RuntimeException(e);
         }
         return m;
+    }
+
+    public static Statement getStmt() {
+        return stmt;
     }
 }

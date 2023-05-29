@@ -12,9 +12,9 @@ public class ViewPersonas extends JFrame {
     private JLabel buscarJLabel;
     JPopupMenu popupMenu = new JPopupMenu();
 
-    private JMenuItem menuAniadir = new JMenuItem("Añadir nueva persona");
-    private JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
-    private JMenuItem menuEditar = new JMenuItem("Guardar cambios");
+    private final JMenuItem menuAniadir = new JMenuItem("Añadir nueva persona");
+    private final JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
+    private final JMenuItem menuEditar = new JMenuItem("Guardar cambios");
 
     public ViewPersonas(){
         super("Gestor universidad");

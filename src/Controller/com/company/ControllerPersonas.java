@@ -51,7 +51,6 @@ public class ControllerPersonas implements ActionListener {
         frPersonas.getCampoBusqueda().getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                prepararBaseDatos();
                 actualizarFiltro(frPersonas.getCampoBusqueda().getText());
             }
 
@@ -61,21 +60,16 @@ public class ControllerPersonas implements ActionListener {
                 actualizarFiltro(frPersonas.getCampoBusqueda().getText());
             }
             @Override
-            public void changedUpdate(DocumentEvent e) {
-                actualizarFiltro(frPersonas.getCampoBusqueda().getText());
-            }
-        });
+            public void changedUpdate(DocumentEvent e){}});
     }
 
 
     private void actualizarFiltro(String input) {
-        String filtro = frPersonas.getCampoBusqueda().getText();
         DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
         FilterTabla.filtrarTabla(input, tabla);
     }
 
     public void prepararBaseDatos() {
-        //ModelPersonas entrada = new ModelPersonas();
         frPersonas.getTable1().setModel(ModelPersonas.CargaDatos(m));
     }
 

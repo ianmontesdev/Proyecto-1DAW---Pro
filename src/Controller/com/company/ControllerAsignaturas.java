@@ -47,7 +47,6 @@ public class ControllerAsignaturas implements ActionListener {
         frAsignaturas.getCampoBusqueda().getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                prepararBaseDatos();
                 actualizarFiltro(frAsignaturas.getCampoBusqueda().getText());
             }
 
@@ -58,25 +57,18 @@ public class ControllerAsignaturas implements ActionListener {
             }
 
             @Override
-            public void changedUpdate(DocumentEvent e) {
-                prepararBaseDatos();
-                actualizarFiltro(frAsignaturas.getCampoBusqueda().getText());
-            }
+            public void changedUpdate(DocumentEvent e) {}
         });
     }
 
     private void actualizarFiltro(String input) {
-        String filtro = frAsignaturas.getCampoBusqueda().getText();
         DefaultTableModel tabla = (DefaultTableModel) frAsignaturas.getTable1().getModel();
         FilterTabla.filtrarTabla(input, tabla);
     }
 
     public void prepararBaseDatos() {
-        ModelAsignaturas entrada = new ModelAsignaturas();
-        frAsignaturas.getTable1().setModel(entrada.CargaDatos(m));
+        frAsignaturas.getTable1().setModel(ModelAsignaturas.CargaDatos(m));
     }
-
-    //TODO Modificar EliminarEntrada para que funcione con asignaturas
     private void eliminarEntrada(String id) throws SQLException {
         String consulta = "DELETE FROM asignatura WHERE `asignatura`.`id` = " + id;
         stmt = ConectionBD.getStmt();
@@ -85,8 +77,6 @@ public class ControllerAsignaturas implements ActionListener {
         esNuevaEntrada = false;
         JOptionPane.showMessageDialog(null, "La asignatura con el id " + id + " fue eliminado con éxito");
     }
-
-    //TODO Modificar actualizarEntrada para que funcione con asignaturas
     private void actualizarEntrada(String id, String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
         try {
             if (id_profesor.isEmpty()) {
@@ -106,22 +96,17 @@ public class ControllerAsignaturas implements ActionListener {
                 "`id_grado` = '" + id_grado + "' " +
                 "WHERE `asignatura`.`id` = " + id;
 
-        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
-            System.out.println(consulta);
+        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
             prepararBaseDatos();
         }
     }
-
-    //TODO Contar cuántas columnas tiene asignaturas para modificar el String[]
     private void aniadirColumna() {
         DefaultTableModel tabla = (DefaultTableModel) frAsignaturas.getTable1().getModel();
         tabla.addRow(new String[]{"Autogenerable", "", "", "", "", "", "", "", "", ""});
         esNuevaEntrada = true;
     }
-
-    //TODO Modificar aniadirEntrada para que funcione con asignaturas
     private void aniadirEntrada(String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
 
         if (id_profesor.length() == 0) {
@@ -133,7 +118,7 @@ public class ControllerAsignaturas implements ActionListener {
                 "(`nombre`, `creditos`, `tipo`, `curso`, `cuatrimestre`, `id_profesor`, `id_grado`)" +
                 "VALUES ('" + nombre + "','" + creditos + "','" + tipo + "','" + curso + "','" + cuatrimestre + "'," + id_profesor + ",'" + id_grado + "')";
 
-        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado, frAsignaturas)) {
+        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
             stmt = ConectionBD.getStmt();
             stmt.executeUpdate(consulta);
             prepararBaseDatos();
@@ -152,8 +137,7 @@ public class ControllerAsignaturas implements ActionListener {
                 frAsignaturas.dispose();
                 break;
             case "Asignaturas":
-                ModelAsignaturas persona = new ModelAsignaturas();
-                frAsignaturas.getTable1().setModel(persona.CargaDatos(m));
+                frAsignaturas.getTable1().setModel(ModelAsignaturas.CargaDatos(m));
                 break;
             case "Añadir nueva asignatura":
                 aniadirColumna();
@@ -166,7 +150,6 @@ public class ControllerAsignaturas implements ActionListener {
                 }
                 break;
             case "Guardar cambios":
-                //TODO modificar guardarcambios para que funcione con asignaturas
                 if (esNuevaEntrada && frAsignaturas.getTable1().getSelectedRow() == (frAsignaturas.getTable1().getRowCount() - 1)) {
                     try {
                         aniadirEntrada((String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 1),

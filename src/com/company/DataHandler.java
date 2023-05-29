@@ -1,6 +1,4 @@
 package com.company;
-
-import view.com.company.ViewAsignaturas;
 import view.com.company.ViewPersonas;
 
 import javax.swing.*;
@@ -10,8 +8,6 @@ import java.util.Arrays;
 
 public class DataHandler {
     private static boolean resultado;
-
-    //TODO Añadir comprobaciones para datos de asignaturas
     public static boolean ComprobarDatosPersona(String dni, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo, ViewPersonas frPersonas){
         resultado = true;
         comprobarDNIPersona(dni, frPersonas);
@@ -23,7 +19,7 @@ public class DataHandler {
         return resultado;
     }
 
-    public static boolean ComprobarDatosAsignaturas(String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado, ViewAsignaturas frAsignaturas){
+    public static boolean ComprobarDatosAsignaturas(String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado){
         resultado = true;
         comprobarNombreAsignatura(nombre);
         comprobarCreditosAsignatura(creditos);

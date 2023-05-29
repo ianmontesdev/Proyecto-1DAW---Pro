@@ -1,5 +1,6 @@
 package Controller.com.company;
 
+import model.com.company.ModelAsignaturas;
 import model.com.company.ModelPersonas;
 import view.com.company.ViewEntrada;
 
@@ -34,9 +35,8 @@ public class ControllerEntrada {
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             frEntrada.dispose();
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException e) {
         System.exit(0);
-    }
-
+        }
     }
 }
