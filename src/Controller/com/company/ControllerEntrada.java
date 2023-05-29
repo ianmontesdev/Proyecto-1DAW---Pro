@@ -2,7 +2,10 @@ package Controller.com.company;
 
 import model.com.company.ModelPersonas;
 import view.com.company.ViewEntrada;
+
 import java.util.concurrent.TimeUnit;
+
+import static com.company.FormatUI.setAppIcon;
 
 public class ControllerEntrada {
     private final ViewEntrada frEntrada = new ViewEntrada();
@@ -14,6 +17,7 @@ public class ControllerEntrada {
 
 
     public void iniciarVentana() {
+        setAppIcon(frEntrada);
         frEntrada.setVisible(true);
     }
 

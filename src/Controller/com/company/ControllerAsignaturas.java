@@ -14,6 +14,8 @@ import java.awt.event.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.company.FormatUI.setAppIcon;
+
 public class ControllerAsignaturas implements ActionListener {
 
     private final ViewAsignaturas frAsignaturas = new ViewAsignaturas();
@@ -30,6 +32,7 @@ public class ControllerAsignaturas implements ActionListener {
     }
 
     public void iniciarVentana() {
+        setAppIcon(frAsignaturas);
         frAsignaturas.setVisible(true);
         frAsignaturas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }

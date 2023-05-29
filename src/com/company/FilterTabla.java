@@ -1,34 +1,25 @@
 package com.company;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
 
 public class FilterTabla {
+
+    /*Este método permite filtrar la tabla por coincidencias comparándolo con el input recibido del JTextField,
+      El enfoque ha sido crear un Array que contiene objetos genéricos con todos los datos de cada fila.
+
+      Este objeto sería iterable con otro for y podría saber qué columna específicamente ha coincidido, pero debido a que
+      mi único interés es saber si algún dato de la fila coincide, he decidido convertirlo a un String con el método
+      toString() y hacer una única comparación.
+
+      De este modo puedo filtrar la tabla con un único bucle for, que se
+      encarga de recorrer cada uno de los objetos.*/
     public static void filtrarTabla(String input, DefaultTableModel tabla) {
-        for (int i = tabla.getRowCount() - 1; i >= 0; i--) {
-
-            ArrayList<String> miArrayList = new ArrayList<>();
-
-            for (int j = 0; j < tabla.getColumnCount(); j++) {
-                //Try catch para evitar errores con los campos en NULL en la BBDD
-                try {
-                    String valor = tabla.getValueAt(i, j).toString().toLowerCase();
-                    if (valor.contains(input.toLowerCase())) {
-                        miArrayList.add(valor);
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            if (miArrayList.size() == 0) {
+        Object[] miArray = tabla.getDataVector().toArray();
+        for (int i = miArray.length-1; i >= 0; i--) {
+            if (!miArray[i].toString().toLowerCase().contains(input.toLowerCase())){
                 tabla.removeRow(i);
             }
         }
     }
-
-    public static void filtrarTabla2(String input, DefaultTableModel tabla) {
-
-    }
-
 
 }

@@ -2,12 +2,17 @@ package view.com.company;
 
 import javax.swing.*;
 
+import static com.company.FormatUI.*;
+
 public class ViewAsignaturas extends JFrame {
     private JPanel ViewAsignaturas;
     private JTable table1;
     private JButton personasButton;
     private JButton asignaturasButton;
-    private JTextField CampoBusqueda;
+    private JTextField campoBusqueda;
+    private JScrollPane ScrollPane;
+    private JLabel buscarJLabel;
+    private JPanel buttonsContainer;
     JPopupMenu popupMenu = new JPopupMenu();
 
     private JMenuItem menuAniadir = new JMenuItem("Añadir nueva asignatura");
@@ -21,6 +26,15 @@ public class ViewAsignaturas extends JFrame {
         int alto = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height)/2;
         setSize(ancho, alto);
         setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2 - (ancho/2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2 - (alto/2)));
+
+        formatTable(table1);
+        formatSearch(campoBusqueda);
+        formatScrollPane(ScrollPane);
+        formatJLabel(buscarJLabel);
+        formatButton(asignaturasButton);
+        formatButton(personasButton);
+        formatButtonContainer(buttonsContainer);
+        formatView(ViewAsignaturas);
 
         popupMenu.add(menuAniadir);
         popupMenu.add(menuEliminar);
@@ -43,5 +57,5 @@ public class ViewAsignaturas extends JFrame {
 
     public JMenuItem getMenuEditar() {return menuEditar;}
 
-    public JTextField getCampoBusqueda() {return CampoBusqueda;}
+    public JTextField getCampoBusqueda() {return campoBusqueda;}
 }

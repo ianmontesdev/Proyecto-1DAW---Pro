@@ -14,12 +14,16 @@ import java.awt.event.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.company.FormatUI.setAppIcon;
+
 public class ControllerPersonas implements ActionListener {
 
     private final ViewPersonas frPersonas = new ViewPersonas();
     Statement stmt;
     private final DefaultTableModel m = null;
     private boolean esNuevaEntrada = false;
+
+    JMenuBar menuBar;
 
     public ControllerPersonas() {
         iniciarVentana();
@@ -29,8 +33,12 @@ public class ControllerPersonas implements ActionListener {
 
 
     public void iniciarVentana() {
+        setAppIcon(frPersonas);
         frPersonas.setVisible(true);
         frPersonas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        menuBar = new JMenuBar();
+        menuBar.add(new JMenu("Interfaz").add("Tema claro"));
+        frPersonas.setJMenuBar(menuBar);
     }
 
 
@@ -121,6 +129,7 @@ public class ControllerPersonas implements ActionListener {
     private void aniadirColumna() {
         DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
         tabla.addRow(new String[]{"", "", "", "", "", "", "", "", "", ""});
+        frPersonas.getScrollPane().getVerticalScrollBar().setValue(frPersonas.getScrollPane().getVerticalScrollBar().getMaximum());
     }
 
     private void aniadirEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
