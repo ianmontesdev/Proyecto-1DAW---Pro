@@ -1,6 +1,5 @@
 package Controller.com.company;
 
-import model.com.company.ModelAsignaturas;
 import model.com.company.ModelPersonas;
 import view.com.company.ViewEntrada;
 
@@ -24,7 +23,7 @@ public class ControllerEntrada {
 
     public void iniciarApp() {
         /*
-        Pantalla de entrada, en la cuál abrimos la conexión con la base de datos de forma global, en caso de registrar un
+        Pantalla de entrada, en la cuál abrimos la conexión con la base de datos de forma global inicializando ModelPersonas, en caso de registrar un
         NullPointerException (lo cuál significaría que la conexión con la BBDD no ha sido satisfactoria), el programa terminará
         */
         try {

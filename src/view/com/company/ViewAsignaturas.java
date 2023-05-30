@@ -2,6 +2,8 @@ package view.com.company;
 
 import javax.swing.*;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.company.FormatUI.*;
 
 public class ViewAsignaturas extends JFrame {
@@ -27,14 +29,25 @@ public class ViewAsignaturas extends JFrame {
         setSize(ancho, alto);
         setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2 - (ancho/2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2 - (alto/2)));
 
-        formatTable(table1);
-        formatSearch(campoBusqueda);
-        formatScrollPane(ScrollPane);
-        formatJLabel(buscarJLabel);
-        formatButton(asignaturasButton);
-        formatButton(personasButton);
-        formatButtonContainer(buttonsContainer);
-        formatView(ViewAsignaturas);
+        Thread estilos = new Thread(() ->{
+            while(true){
+                formatTable(table1);
+                formatSearch(campoBusqueda);
+                formatScrollPane(ScrollPane);
+                formatJLabel(buscarJLabel);
+                formatButton(asignaturasButton);
+                formatButton(personasButton);
+                formatButtonContainer(buttonsContainer);
+                formatView(ViewAsignaturas);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        estilos.start();
 
         popupMenu.add(menuAniadir);
         popupMenu.add(menuEliminar);
@@ -58,4 +71,8 @@ public class ViewAsignaturas extends JFrame {
     public JMenuItem getMenuEditar() {return menuEditar;}
 
     public JTextField getCampoBusqueda() {return campoBusqueda;}
+
+    public JScrollPane getScrollPane() {
+        return ScrollPane;
+    }
 }

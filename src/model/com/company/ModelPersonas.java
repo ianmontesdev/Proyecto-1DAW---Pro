@@ -20,7 +20,6 @@ public class ModelPersonas {
         String[] titulos = {"NIF", "Nombre", "Apellido1", "Apellido2", "Ciudad", "Dirección", "Teléfono", "Fecha Nacimiento", "Sexo", "Tipo"};
         m = new DefaultTableModel(null, titulos);
         try {
-            Statement stmt = ConectionBD.getStmt();
             ResultSet rs = stmt.executeQuery("select * from persona");
             String[] fila = new String[10];
 

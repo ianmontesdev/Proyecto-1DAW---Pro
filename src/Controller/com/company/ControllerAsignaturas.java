@@ -1,9 +1,10 @@
 package Controller.com.company;
 
 import Connection.ConectionBD;
-import com.company.FilterTabla;
-import com.company.DataHandler;
+import com.company.DataValidation;
+import com.company.MenuBar;
 import model.com.company.ModelAsignaturas;
+import model.com.company.ModelPersonas;
 import view.com.company.ViewAsignaturas;
 
 import javax.swing.*;
@@ -14,9 +15,11 @@ import java.awt.event.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.company.DataValidation.gestionNull;
+import static com.company.FilterTabla.actualizarFiltro;
 import static com.company.FormatUI.setAppIcon;
 
-public class ControllerAsignaturas implements ActionListener {
+public class ControllerAsignaturas implements ActionListener, WindowListener {
 
     private final ViewAsignaturas frAsignaturas = new ViewAsignaturas();
 
@@ -35,6 +38,8 @@ public class ControllerAsignaturas implements ActionListener {
         setAppIcon(frAsignaturas);
         frAsignaturas.setVisible(true);
         frAsignaturas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        MenuBar menuBar = new MenuBar();
+        frAsignaturas.setJMenuBar(menuBar.MenuBar());
     }
 
 
@@ -47,44 +52,36 @@ public class ControllerAsignaturas implements ActionListener {
         frAsignaturas.getCampoBusqueda().getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                actualizarFiltro(frAsignaturas.getCampoBusqueda().getText());
+                actualizarFiltro(frAsignaturas.getCampoBusqueda().getText(), frAsignaturas);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 prepararBaseDatos();
-                actualizarFiltro(frAsignaturas.getCampoBusqueda().getText());
+                actualizarFiltro(frAsignaturas.getCampoBusqueda().getText(), frAsignaturas);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {}
         });
     }
-
-    private void actualizarFiltro(String input) {
-        DefaultTableModel tabla = (DefaultTableModel) frAsignaturas.getTable1().getModel();
-        FilterTabla.filtrarTabla(input, tabla);
-    }
-
     public void prepararBaseDatos() {
         frAsignaturas.getTable1().setModel(ModelAsignaturas.CargaDatos(m));
     }
     private void eliminarEntrada(String id) throws SQLException {
-        String consulta = "DELETE FROM asignatura WHERE `asignatura`.`id` = " + id;
-        stmt = ConectionBD.getStmt();
-        stmt.executeUpdate(consulta);
-        prepararBaseDatos();
-        esNuevaEntrada = false;
-        JOptionPane.showMessageDialog(null, "La asignatura con el id " + id + " fue eliminado con éxito");
+        if(esNuevaEntrada && frAsignaturas.getTable1().getRowCount()-1 == frAsignaturas.getTable1().getSelectedRow()){
+            DefaultTableModel dt = (DefaultTableModel) frAsignaturas.getTable1().getModel();
+            dt.removeRow(frAsignaturas.getTable1().getRowCount()-1);
+            esNuevaEntrada = false;
+        }else {
+            String consulta = "DELETE FROM asignatura WHERE `asignatura`.`id` = " + id;
+            ModelPersonas.getStmt().executeUpdate(consulta);
+            prepararBaseDatos();
+            esNuevaEntrada = false;
+            JOptionPane.showMessageDialog(null, "La asignatura con el id " + id + " fue eliminado con éxito");
+        }
     }
     private void actualizarEntrada(String id, String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
-        try {
-            if (id_profesor.isEmpty()) {
-                id_profesor = null;
-            } else{ id_profesor = "'" + id_profesor + "'"; }
-        } catch (NullPointerException e) {
-            id_profesor = null;
-        }
 
         String consulta = "UPDATE `asignatura` " +
                 "SET `nombre` = '" + nombre + "', " +
@@ -92,19 +89,19 @@ public class ControllerAsignaturas implements ActionListener {
                 "`tipo` = '" + tipo + "', " +
                 "`curso` = '" + curso + "', " +
                 "`cuatrimestre` = '" + cuatrimestre + "', " +
-                "`id_profesor` = " + id_profesor + ", " +
+                "`id_profesor` = " + gestionNull(id_profesor) + ", " +
                 "`id_grado` = '" + id_grado + "' " +
                 "WHERE `asignatura`.`id` = " + id;
 
-        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
-            stmt = ConectionBD.getStmt();
-            stmt.executeUpdate(consulta);
+        if (DataValidation.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
+            ModelPersonas.getStmt().executeUpdate(consulta);
             prepararBaseDatos();
         }
     }
     private void aniadirColumna() {
         DefaultTableModel tabla = (DefaultTableModel) frAsignaturas.getTable1().getModel();
         tabla.addRow(new String[]{"Autogenerable", "", "", "", "", "", "", "", "", ""});
+        frAsignaturas.getScrollPane().getVerticalScrollBar().setValue(frAsignaturas.getScrollPane().getVerticalScrollBar().getMaximum());
         esNuevaEntrada = true;
     }
     private void aniadirEntrada(String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
@@ -118,9 +115,8 @@ public class ControllerAsignaturas implements ActionListener {
                 "(`nombre`, `creditos`, `tipo`, `curso`, `cuatrimestre`, `id_profesor`, `id_grado`)" +
                 "VALUES ('" + nombre + "','" + creditos + "','" + tipo + "','" + curso + "','" + cuatrimestre + "'," + id_profesor + ",'" + id_grado + "')";
 
-        if (DataHandler.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
-            stmt = ConectionBD.getStmt();
-            stmt.executeUpdate(consulta);
+        if (DataValidation.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
+            ModelPersonas.getStmt().executeUpdate(consulta);
             prepararBaseDatos();
             esNuevaEntrada = false;
         }
@@ -132,24 +128,22 @@ public class ControllerAsignaturas implements ActionListener {
         String entrada = e.getActionCommand();
 
         switch (entrada) {
-            case "Personas":
+            case "Personas" -> {
                 new ControllerPersonas();
                 frAsignaturas.dispose();
-                break;
-            case "Asignaturas":
-                frAsignaturas.getTable1().setModel(ModelAsignaturas.CargaDatos(m));
-                break;
-            case "Añadir nueva asignatura":
-                aniadirColumna();
-                break;
-            case "Eliminar de la BBDD":
+            }
+            case "Asignaturas" -> frAsignaturas.getTable1().setModel(ModelAsignaturas.CargaDatos(m));
+            case "Añadir nueva asignatura" -> aniadirColumna();
+            case "Eliminar de la BBDD" -> {
                 try {
                     eliminarEntrada(frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 0).toString());
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
+                } catch (ArrayIndexOutOfBoundsException aie) {
+                    JOptionPane.showMessageDialog(null, "Primero debes seleccionar una fila para eliminar");
                 }
-                break;
-            case "Guardar cambios":
+            }
+            case "Guardar cambios" -> {
                 if (esNuevaEntrada && frAsignaturas.getTable1().getSelectedRow() == (frAsignaturas.getTable1().getRowCount() - 1)) {
                     try {
                         aniadirEntrada((String) frAsignaturas.getTable1().getValueAt(frAsignaturas.getTable1().getSelectedRow(), 1),
@@ -176,7 +170,42 @@ public class ControllerAsignaturas implements ActionListener {
                         throw new RuntimeException(ex);
                     }
                 }
-                break;
+            }
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        ConectionBD.closeConn();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }

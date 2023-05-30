@@ -1,5 +1,9 @@
 package com.company;
 
+import view.com.company.ViewAsignaturas;
+import view.com.company.ViewPersonas;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class FilterTabla {
@@ -16,10 +20,26 @@ public class FilterTabla {
     public static void filtrarTabla(String input, DefaultTableModel tabla) {
         Object[] miArray = tabla.getDataVector().toArray();
         for (int i = miArray.length-1; i >= 0; i--) {
-            if (!miArray[i].toString().toLowerCase().contains(input.toLowerCase())){
+            if (!miArray[i].toString().toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú","u")
+                    .contains(input.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú","u"))){
                 tabla.removeRow(i);
             }
         }
     }
 
+    /*Este método cumple la función de actualizar la tabla dentro de nuestra vista, para poder hacerlo
+    * compatible con los dos modelos de tabla se ha creado un trycatch que prueba el casteo a cada tipo
+    * de JFrame (ViewPersonas o ViewAsignaturas)*/
+    public static void actualizarFiltro(String input, JFrame view) {
+        try{
+            ViewPersonas view2 = (ViewPersonas) view;
+            DefaultTableModel tabla = (DefaultTableModel) view2.getTable1().getModel();
+            FilterTabla.filtrarTabla(input, tabla);
+        }
+        catch(ClassCastException ignored){
+            ViewAsignaturas view2 = (ViewAsignaturas) view;
+            DefaultTableModel tabla = (DefaultTableModel) view2.getTable1().getModel();
+            FilterTabla.filtrarTabla(input, tabla);
+        }
+    }
 }

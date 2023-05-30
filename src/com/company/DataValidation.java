@@ -6,8 +6,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-public class DataHandler {
+public class DataValidation {
     private static boolean resultado;
+
+    /*Esta clase se encarga de toda la validación de datos enviada a la BBDD, se ha creado una clase externa para poder reutilizar
+    el código tanto en ControllerPersonas como en ControllerAsignaturas*/
     public static boolean ComprobarDatosPersona(String dni, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo, ViewPersonas frPersonas){
         resultado = true;
         comprobarDNIPersona(dni, frPersonas);
@@ -29,6 +32,20 @@ public class DataHandler {
         comprobarIdProfesorAsignatura(id_profesor);
         comprobarIdGradoAsignatura(id_grado);
         return resultado;
+    }
+
+
+    /* El siguiente método se usa para gestionar los null en las consultas, debido a que quiero poder enviar tanto strings envueltas en ' ' como null que no pueden estar envueltos.
+     * En el caso de ser un string vacío se convertirá a null, de no serlo se le concatenarán ' ' a ambos lados, y en caso de devolver un NullPointerException, el string recibido como argumento ya es null,
+     * por lo que podemos ignorar el NullPointerException y la consulta enviada a la base de datos contendrá un verdadero null y no 'null'*/
+    public static String gestionNull(String string){
+        try {
+            if (string.isEmpty()) {
+                string = null;
+            } else{ string = "'" + string + "'"; }
+        } catch (NullPointerException ignored) {
+        }
+        return string;
     }
     
     private static void comprobarDNIPersona(String dni, ViewPersonas frPersonas){
@@ -57,27 +74,27 @@ public class DataHandler {
     }
 
     private static void comprobarTamaniosPersona(String nombre, String apellido1, String apellido2, String ciudad, String direccion){
-        if ( nombre.length() <= 0 || nombre.length() > 25) {
+        if ( nombre.length() == 0 || nombre.length() > 25) {
             resultado = false;
             JOptionPane.showMessageDialog(null, "El nombre debe contener entre 0 y 25 caracteres");
         }
-        if ( apellido1.length() <= 0 || apellido1.length() > 50) {
+        if ( apellido1.length() == 0 || apellido1.length() > 50) {
             resultado = false;
             JOptionPane.showMessageDialog(null, "El primer apellido debe contener entre 0 y 50 caracteres");
         }
 
         if(apellido2 != null){
-            if ( apellido2.length() <= 0 || apellido2.length() > 50) {
+            if (apellido2.length() > 50) {
                 resultado = false;
                 JOptionPane.showMessageDialog(null, "El segundo apellido debe contener entre 0 y 50 caracteres");
             }
         }
 
-        if ( ciudad.length() <= 0 || ciudad.length() > 25) {
+        if ( ciudad.length() == 0 || ciudad.length() > 25) {
             resultado = false;
             JOptionPane.showMessageDialog(null, "La ciudad debe contener entre 0 y 25 caracteres");
         }
-        if ( direccion.length() <= 0 || direccion.length() > 50) {
+        if ( direccion.length() == 0 || direccion.length() > 50) {
             resultado = false;
             JOptionPane.showMessageDialog(null, "La dirección debe contener entre 0 y 50 caracteres");
         }
@@ -113,7 +130,9 @@ public class DataHandler {
             try{
                 if (telefono.length() == 9){
                     Integer.parseInt(telefono);
-                }else {
+                } else if (telefono.isEmpty()) {
+                    telefono = null;
+                } else {
                     throw new NumberFormatException("Teléfono inválido");
                 }
             }
@@ -135,9 +154,11 @@ public class DataHandler {
     private static void comprobarIdProfesorAsignatura(String id_profesor){
         if(id_profesor != null){
             try{
-                if (id_profesor.length() <= 10){
+                if (id_profesor.isEmpty()){
+                    id_profesor = null;
+                } else if (id_profesor.length() <= 10) {
                     Integer.parseInt(id_profesor.substring(1, id_profesor.length()-1));
-                }else {
+                } else {
                     throw new NumberFormatException("id inválida");
                 }
             }
@@ -149,7 +170,7 @@ public class DataHandler {
     }
 
     private static void comprobarNombreAsignatura(String nombre){
-        if ( nombre.length() <= 0 || nombre.length() > 100) {
+        if ( nombre.length() == 0 || nombre.length() > 100) {
             resultado = false;
             JOptionPane.showMessageDialog(null, "El nombre debe contener entre 0 y 25 caracteres");
         }
@@ -166,7 +187,7 @@ public class DataHandler {
 
     private static void comprobarTinyIntAsignatura(String curso, String campo){
         try{
-            if (Integer.parseInt(curso) <= 0 || Integer.parseInt(curso) >= 255){
+            if (Integer.parseInt(curso) == 0 || Integer.parseInt(curso) >= 255){
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
@@ -185,6 +206,4 @@ public class DataHandler {
             JOptionPane.showMessageDialog(null, "id grado debe ser un entero de máximo 10 caracteres");
         }
     }
-
-
 }
