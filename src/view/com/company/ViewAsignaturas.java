@@ -17,9 +17,9 @@ public class ViewAsignaturas extends JFrame {
     private JPanel buttonsContainer;
     JPopupMenu popupMenu = new JPopupMenu();
 
-    private JMenuItem menuAniadir = new JMenuItem("Añadir nueva asignatura");
-    private JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
-    private JMenuItem menuEditar = new JMenuItem("Guardar cambios");
+    private final JMenuItem menuAniadir = new JMenuItem("Añadir nueva asignatura");
+    private final JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
+    private final JMenuItem menuEditar = new JMenuItem("Guardar cambios");
 
     public ViewAsignaturas(){
         super("Gestor universidad");

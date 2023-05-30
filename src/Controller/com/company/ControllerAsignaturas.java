@@ -44,11 +44,11 @@ public class ControllerAsignaturas implements ActionListener, WindowListener {
 
 
     public void iniciarEventos() {
-        frAsignaturas.getPersonasButton().addActionListener(this::actionPerformed);
-        frAsignaturas.getAsignaturasButton().addActionListener(this::actionPerformed);
-        frAsignaturas.getMenuAniadir().addActionListener(this::actionPerformed);
-        frAsignaturas.getMenuEditar().addActionListener(this::actionPerformed);
-        frAsignaturas.getMenuEliminar().addActionListener(this::actionPerformed);
+        frAsignaturas.getPersonasButton().addActionListener(this);
+        frAsignaturas.getAsignaturasButton().addActionListener(this);
+        frAsignaturas.getMenuAniadir().addActionListener(this);
+        frAsignaturas.getMenuEditar().addActionListener(this);
+        frAsignaturas.getMenuEliminar().addActionListener(this);
         frAsignaturas.getCampoBusqueda().getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

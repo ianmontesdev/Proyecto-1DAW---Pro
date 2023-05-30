@@ -76,11 +76,6 @@ public class FormatUI {
     public static void setAppIcon(JFrame view){
         view.setIconImage(new ImageIcon("src/resources/icon.png").getImage());
     }
-
-    public static Color getColor4() {
-        return color4;
-    }
-
     public static void setColor4(Color color4) {
         FormatUI.color4 = color4;
     }
@@ -93,16 +88,8 @@ public class FormatUI {
         FormatUI.color1 = color1;
     }
 
-    public static Color getColor5() {
-        return color5;
-    }
-
     public static void setColor5(Color color5) {
         FormatUI.color5 = color5;
-    }
-
-    public static Color getColor3() {
-        return color3;
     }
 
     public static void setColor3(Color color3) {
@@ -117,16 +104,8 @@ public class FormatUI {
         FormatUI.color6 = color6;
     }
 
-    public static Color getColor7() {
-        return color7;
-    }
-
     public static void setColor7(Color color7) {
         FormatUI.color7 = color7;
-    }
-
-    public static Color getColor2() {
-        return color2;
     }
 
     public static void setColor2(Color color2) {

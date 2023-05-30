@@ -14,7 +14,6 @@ public class ConectionBD {
     private static final String passwd = "";
     private static final String db = "universidad";
     private static Statement stmt;
-    private static ResultSet rs;
 
 
     //Abrir la conexión de la BBDD

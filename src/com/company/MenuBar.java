@@ -37,7 +37,7 @@ public class MenuBar implements ActionListener{
         menuTamanioMas.setFont(textoFont);
         menuTamanioMas.addActionListener(this);
         menuAjustes.add(menuTamanioMas);
-        menuTamanioMas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_MASK));
+        menuTamanioMas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem menuTamanioReset = new JMenuItem("Restaurar a 12pt");
         menuTamanioReset.setBackground(colorFondo);
@@ -45,7 +45,7 @@ public class MenuBar implements ActionListener{
         menuTamanioReset.setFont(textoFont);
         menuTamanioReset.addActionListener(this);
         menuAjustes.add(menuTamanioReset);
-        menuTamanioReset.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+        menuTamanioReset.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem menuTamanioMenos = new JMenuItem("Reducir 1pt");
         menuTamanioMenos.setBackground(colorFondo);
@@ -53,7 +53,7 @@ public class MenuBar implements ActionListener{
         menuTamanioMenos.setFont(textoFont);
         menuTamanioMenos.addActionListener(this);
         menuAjustes.add(menuTamanioMenos);
-        menuTamanioMenos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_MASK));
+        menuTamanioMenos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 
         JMenu menuTemas = new JMenu("Temas");
         menuTemas.setBackground(colorFondo);
@@ -67,7 +67,7 @@ public class MenuBar implements ActionListener{
         menuTema1.setFont(textoFont);
         menuTema1.addActionListener(this);
         menuTemas.add(menuTema1);
-        menuTema1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK));
+        menuTema1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem menuTema2 = new JMenuItem("Claro");
         menuTema2.setBackground(colorFondo);
@@ -75,7 +75,7 @@ public class MenuBar implements ActionListener{
         menuTema2.setFont(textoFont);
         menuTema2.addActionListener(this);
         menuTemas.add(menuTema2);
-        menuTema2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK));
+        menuTema2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem menuTema3 = new JMenuItem("Alto contraste");
         menuTema3.setBackground(colorFondo);
@@ -83,15 +83,15 @@ public class MenuBar implements ActionListener{
         menuTema3.setFont(textoFont);
         menuTema3.addActionListener(this);
         menuTemas.add(menuTema3);
-        menuTema3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_MASK));
+        menuTema3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK));
 
-        JMenuItem menuTema4 = new JMenuItem("80's babe!");
+        JMenuItem menuTema4 = new JMenuItem("80's !");
         menuTema4.setBackground(colorFondo);
         menuTema4.setForeground(colorTexto);
         menuTema4.setFont(textoFont);
         menuTema4.addActionListener(this);
         menuTemas.add(menuTema4);
-        menuTema4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_MASK));
+        menuTema4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem menuTema5 = new JMenuItem("Daltonismo");
         menuTema5.setBackground(colorFondo);
@@ -99,7 +99,7 @@ public class MenuBar implements ActionListener{
         menuTema5.setFont(textoFont);
         menuTema5.addActionListener(this);
         menuTemas.add(menuTema5);
-        menuTema5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_MASK));
+        menuTema5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK));
 
         JMenu menuAyuda = new JMenu("Ayuda");
         menuAyuda.setBackground(colorFondo);
@@ -120,6 +120,13 @@ public class MenuBar implements ActionListener{
         menuAyuda2.setFont(textoFont);
         menuAyuda2.addActionListener(this);
         menuAyuda.add(menuAyuda2);
+
+        JMenuItem menuAyuda3 = new JMenuItem("¿Cómo modifico una entrada?");
+        menuAyuda3.setBackground(colorFondo);
+        menuAyuda3.setForeground(colorTexto);
+        menuAyuda3.setFont(textoFont);
+        menuAyuda3.addActionListener(this);
+        menuAyuda.add(menuAyuda3);
 
         menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         menuBar.setBackground(colorFondo);
@@ -152,22 +159,37 @@ public class MenuBar implements ActionListener{
 
         switch(entrada) {
             case "¿Cómo creo una nueva entrada?" -> {
-                JOptionPane.showMessageDialog(null, "" +
-                        "Para introducir una nueva entrada siga los siguientes pasos:\n\n" +
-                        "1º.  Haga click derecho en la tabla y seleccione la opción \"añadir nueva entrada\".\n" +
-                        "2º.  Se ha creado una fila al final de la tabla, rellénela!.\n" +
-                        "3º.  Seleccione la fila que acaba de rellenar y haga click derecho en ella.\n" +
-                        "4º.  Elija la opción \"Guardar cambios\" del menú que acaba de aparecer.\n\n" +
-                        "El programa le indicará cualquier error, asegúrese de corregirlo y vuelva a repetir pasos 3 y 4.");
+                JOptionPane.showMessageDialog(null, """
+                        Para introducir una nueva entrada siga los siguientes pasos:
+
+                        1º.  Haga click derecho en la tabla y seleccione la opción "añadir nueva entrada".
+                        2º.  Se ha creado una fila al final de la tabla, rellénela!.
+                        3º.  Seleccione la fila que acaba de rellenar y haga click derecho en ella.
+                        4º.  Elija la opción "Guardar cambios" del menú que acaba de aparecer.
+
+                        El programa le indicará cualquier error, asegúrese de corregirlo y vuelva a repetir pasos 3 y 4.""");
             }
             case "¿Cómo navego por la interfaz?" -> {
-                JOptionPane.showMessageDialog(null, "" +
-                        "La interfaz se compone de dos botones en el panel izquierdo, cada uno\n" +
-                        "de ellos le llevará a la pantalla que gestiona la tabla de Personas o la\n" +
-                        "tabla de Asignaturas.\n\n" +
-                        "Por otra parte, si ya se encuentra, digamos, en la tabla de Personas, y hace\n" +
-                        "click en el botón con la misma etiqueta, la tabla se volverá a recargar\n" +
-                        "haciendo una consulta a la base de datos.");
+                JOptionPane.showMessageDialog(null, """
+                            La interfaz se compone de dos botones en el panel izquierdo, cada uno
+                        de ellos le llevará a la pantalla que gestiona la tabla de Personas o la
+                        tabla de Asignaturas.
+
+                            Por otra parte, si ya se encuentra, digamos, en la tabla de Personas, y hace
+                        click en el botón con la misma etiqueta, la tabla se volverá a recargar
+                        haciendo una consulta a la base de datos.
+                        
+                            Si sufre de daltonismo, puede elegir el tema para daltónicos en el menú Temas, también
+                        puede incrementar o reducir el tamaño de fuente en el menú Ajustes""");
+            }
+            case "¿Cómo modifico una entrada?" -> {
+                JOptionPane.showMessageDialog(null, """
+                            Para modificar una entrada tan sólo tiene que modificar los datos que desee
+                        en la tabla, y con la fila modificada seleccionada hacer click derecho
+                        y elegir la opción "Guardar cambios". 
+                        
+                            Del mismo modo, si desea eliminar una entrada sólo debe seleccionarla,
+                        hacer click derecho y elegir "Eliminar entrada".""");
             }
             case "Aumentar 1pt" -> {
                 aumentarTexto();
@@ -205,7 +227,7 @@ public class MenuBar implements ActionListener{
                 setColor6(new Color(190, 190, 190));
                 setColor7(new Color(255, 255, 255));
             }
-            case "80's babe!" -> {
+            case "80's !" -> {
                 setColor2(new Color(35, 27, 46));
                 setColor5(new Color(36, 33, 52));
                 setColor3(new Color(31, 3, 38));

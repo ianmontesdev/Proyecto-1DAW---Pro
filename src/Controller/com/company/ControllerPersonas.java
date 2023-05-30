@@ -34,11 +34,11 @@ public class ControllerPersonas implements ActionListener, WindowListener {
         frPersonas.setJMenuBar(menuBar.MenuBar());
     }
     public void iniciarEventos() {
-        frPersonas.getPersonasButton().addActionListener(this::actionPerformed);
-        frPersonas.getAsignaturasButton().addActionListener(this::actionPerformed);
-        frPersonas.getMenuAniadir().addActionListener(this::actionPerformed);
-        frPersonas.getMenuEditar().addActionListener(this::actionPerformed);
-        frPersonas.getMenuEliminar().addActionListener(this::actionPerformed);
+        frPersonas.getPersonasButton().addActionListener(this);
+        frPersonas.getAsignaturasButton().addActionListener(this);
+        frPersonas.getMenuAniadir().addActionListener(this);
+        frPersonas.getMenuEditar().addActionListener(this);
+        frPersonas.getMenuEliminar().addActionListener(this);
         frPersonas.getCampoBusqueda().getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
