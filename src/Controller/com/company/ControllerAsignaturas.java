@@ -105,15 +105,9 @@ public class ControllerAsignaturas implements ActionListener, WindowListener {
         esNuevaEntrada = true;
     }
     private void aniadirEntrada(String nombre, String creditos, String tipo, String curso, String cuatrimestre, String id_profesor, String id_grado) throws SQLException {
-
-        if (id_profesor.length() == 0) {
-            id_profesor = null;
-        } else {id_profesor = "'" + id_profesor + "'";}
-        ;
-
         String consulta = "INSERT INTO `asignatura`" +
                 "(`nombre`, `creditos`, `tipo`, `curso`, `cuatrimestre`, `id_profesor`, `id_grado`)" +
-                "VALUES ('" + nombre + "','" + creditos + "','" + tipo + "','" + curso + "','" + cuatrimestre + "'," + id_profesor + ",'" + id_grado + "')";
+                "VALUES ('" + nombre + "','" + creditos + "','" + tipo + "','" + curso + "','" + cuatrimestre + "'," + gestionNull(id_profesor) + ",'" + id_grado + "')";
 
         if (DataValidation.ComprobarDatosAsignaturas(nombre, creditos, tipo, curso, cuatrimestre, id_profesor, id_grado)) {
             ModelPersonas.getStmt().executeUpdate(consulta);

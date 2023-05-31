@@ -41,11 +41,11 @@ public class DataValidation {
     public static String gestionNull(String string){
         try {
             if (string.isEmpty()) {
-                string = null;
-            } else{ string = "'" + string + "'"; }
+                return null;
+            } else{ return "'" + string + "'"; }
         } catch (NullPointerException ignored) {
+            return null;
         }
-        return string;
     }
     
     private static void comprobarDNIPersona(String dni, ViewPersonas frPersonas){
@@ -152,12 +152,13 @@ public class DataValidation {
     }
 
     private static void comprobarIdProfesorAsignatura(String id_profesor){
+        System.out.println(id_profesor);
         if(id_profesor != null){
             try{
                 if (id_profesor.isEmpty()){
                     id_profesor = null;
                 } else if (id_profesor.length() <= 10) {
-                    Integer.parseInt(id_profesor.substring(1, id_profesor.length()-1));
+                    Integer.parseInt(id_profesor);
                 } else {
                     throw new NumberFormatException("id inválida");
                 }

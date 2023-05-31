@@ -5,6 +5,7 @@ import view.com.company.ViewPersonas;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.Vector;
 
 public class FilterTabla {
 
