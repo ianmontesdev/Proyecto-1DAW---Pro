@@ -35,7 +35,7 @@ public class ControllerEntrada {
             Thread.currentThread().interrupt();
             frEntrada.dispose();
         } catch (NullPointerException e) {
-        System.exit(0);
+            System.exit(0);
         }
     }
 }

@@ -9,12 +9,15 @@ public class FormatUI {
     /*Quiero aplicar distintos temas, por lo que considero que la mejor forma de implementar esta
      funcionalidad es creando una clase que se encargue de formatear las distintas vistas*/
     private static Color color1 = new Color(39, 39, 47);
-    private static Color color2 = new Color(53,54,64);
-    private static Color color3 = new Color(56,57, 67);
-    private static Color color4 = new Color(66,67,76);
-    private static Color color5 = new Color(133,134, 140);
-    private static Color color6 = new Color(191,191,191);
+    private static Color color2 = new Color(53, 54, 64);
+    private static Color color3 = new Color(56, 57, 67);
+    private static Color color4 = new Color(66, 67, 76);
+    private static Color color5 = new Color(133, 134, 140);
+    private static Color color6 = new Color(191, 191, 191);
     private static Color color7 = new Color(222, 205, 119);
+
+    private static Color color8 = new Color(133, 134, 140);
+    private static Color color9 = new Color(191, 191, 191);
 
     private static Font font1 = new Font("Roboto", Font.BOLD, 12);
 
@@ -22,13 +25,14 @@ public class FormatUI {
     private static Font font3 = new Font("Roboto", Font.BOLD, 14);
     private static Font font4 = new Font("Roboto", Font.PLAIN, 14);
 
-    public static void formatView(JPanel view){
+    public static void formatView(JPanel view) {
         view.setBackground(color2);
     }
-    public static void formatTable(JTable table){
+
+    public static void formatTable(JTable table) {
         table.getTableHeader().setFont(font1);
         table.getTableHeader().setBackground(color1);
-        table.getTableHeader().setForeground(color5);
+        table.getTableHeader().setForeground(color8);
         table.getTableHeader().setPreferredSize(new Dimension(10, 35));
         table.getTableHeader().setBorder(new LineBorder(color1, 2));
 
@@ -41,41 +45,42 @@ public class FormatUI {
 
     }
 
-    public static void formatButton(JButton button){
+    public static void formatButton(JButton button) {
         button.setFont(font3);
         button.setBorderPainted(false);
         button.setBackground(color2);
         button.setIconTextGap(10);
-        button.setMargin(new Insets(6,5,5,6));
+        button.setMargin(new Insets(6, 5, 5, 6));
         button.setForeground(color6);
     }
 
-    public static void formatButtonContainer(JPanel buttonsContainer){
+    public static void formatButtonContainer(JPanel buttonsContainer) {
         buttonsContainer.setBackground(color2);
     }
 
-    public static void formatSearch(JTextField busqueda){
+    public static void formatSearch(JTextField busqueda) {
         busqueda.setFont(font2);
         busqueda.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, color1));
         busqueda.setBackground(color4);
-        busqueda.setForeground(color6);
+        busqueda.setForeground(color9);
     }
 
-    public static void formatScrollPane(JScrollPane scrollPane){
+    public static void formatScrollPane(JScrollPane scrollPane) {
         scrollPane.setBackground(color3);
         scrollPane.getViewport().setBackground(color3);
         scrollPane.setBorder(new LineBorder(color3, 2));
     }
 
-    public static void formatJLabel(JLabel jlabel){
+    public static void formatJLabel(JLabel jlabel) {
         jlabel.setFont(font3);
         jlabel.setBackground(color2);
         jlabel.setForeground(color6);
     }
 
-    public static void setAppIcon(JFrame view){
+    public static void setAppIcon(JFrame view) {
         view.setIconImage(new ImageIcon("src/resources/icon.png").getImage());
     }
+
     public static void setColor4(Color color4) {
         FormatUI.color4 = color4;
     }
@@ -106,6 +111,14 @@ public class FormatUI {
 
     public static void setColor7(Color color7) {
         FormatUI.color7 = color7;
+    }
+
+    public static void setColor8(Color color8) {
+        FormatUI.color8 = color8;
+    }
+
+    public static void setColor9(Color color9) {
+        FormatUI.color9 = color9;
     }
 
     public static void setColor2(Color color2) {

@@ -7,12 +7,12 @@ import java.util.logging.Logger;
 
 public class ConectionBD {
 
-    private static Connection conn = null;
     private static final String url = "jdbc:mysql://localhost";
     private static final String port = "3306";
     private static final String user = "root";
     private static final String passwd = "";
     private static final String db = "universidad";
+    private static Connection conn = null;
     private static Statement stmt;
 
 
@@ -57,6 +57,7 @@ public class ConectionBD {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public static Statement getStmt() {
         return stmt;
     }

@@ -10,8 +10,12 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 import static com.company.DataValidation.gestionNull;
 import static com.company.FilterTabla.actualizarFiltro;
@@ -21,18 +25,21 @@ public class ControllerPersonas implements ActionListener, WindowListener {
     private final ViewPersonas frPersonas = new ViewPersonas();
     private final DefaultTableModel m = null;
     private boolean esNuevaEntrada = false;
+
     public ControllerPersonas() {
         iniciarVentana();
         iniciarEventos();
         prepararBaseDatos();
     }
+
     public void iniciarVentana() {
         setAppIcon(frPersonas);
         frPersonas.setVisible(true);
         frPersonas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         MenuBar menuBar = new MenuBar();
-        frPersonas.setJMenuBar(menuBar.MenuBar());
+        frPersonas.setJMenuBar(menuBar.createMenuBar());
     }
+
     public void iniciarEventos() {
         frPersonas.getPersonasButton().addActionListener(this);
         frPersonas.getAsignaturasButton().addActionListener(this);
@@ -43,15 +50,20 @@ public class ControllerPersonas implements ActionListener, WindowListener {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 actualizarFiltro(frPersonas.getCampoBusqueda().getText(), frPersonas);
+                esNuevaEntrada = false;
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 prepararBaseDatos();
                 actualizarFiltro(frPersonas.getCampoBusqueda().getText(), frPersonas);
+                esNuevaEntrada = false;
             }
+
             @Override
-            public void changedUpdate(DocumentEvent e){}});
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
     }
 
     public void prepararBaseDatos() {
@@ -59,11 +71,11 @@ public class ControllerPersonas implements ActionListener, WindowListener {
     }
 
     private void eliminarEntrada(String nif) throws SQLException {
-        if(esNuevaEntrada && frPersonas.getTable1().getRowCount()-1 == frPersonas.getTable1().getSelectedRow()){
+        if (esNuevaEntrada && frPersonas.getTable1().getRowCount() - 1 == frPersonas.getTable1().getSelectedRow()) {
             DefaultTableModel dt = (DefaultTableModel) frPersonas.getTable1().getModel();
-            dt.removeRow(frPersonas.getTable1().getRowCount()-1);
+            dt.removeRow(frPersonas.getTable1().getRowCount() - 1);
             esNuevaEntrada = false;
-        }else {
+        } else {
             String consulta = "DELETE FROM `persona` WHERE `persona`.`nif` = " + "'" + nif + "'";
             ModelPersonas.getStmt().executeUpdate(consulta);
             prepararBaseDatos();
@@ -73,34 +85,40 @@ public class ControllerPersonas implements ActionListener, WindowListener {
     }
 
     private void actualizarEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
-        String consulta = "UPDATE `persona`" +
-                "SET `nombre` = '" + nombre + "', " +
-                "`apellido1` = '" + apellido1 + "', " +
-                "`apellido2` = " + gestionNull(apellido2) + ", " +
-                "`ciudad` = '" + ciudad + "', " +
-                "`direccion` = '" + direccion + "', " +
-                "`telefono` = " + gestionNull(telefono) + ", " +
-                "`fecha_nacimiento` = '" + fechaN + "', " +
-                "`sexo` = '" + sexo + "', " +
-                "`tipo` = '" + tipo + "'" +
-                "WHERE `persona`.`nif` = " + "'" + nif + "'";
+        String consulta = "UPDATE `persona`" + "SET `nombre` = '" + nombre + "', " + "`apellido1` = '" + apellido1 + "', " + "`apellido2` = " + gestionNull(apellido2) + ", " + "`ciudad` = '" + ciudad + "', " + "`direccion` = '" + direccion + "', " + "`telefono` = " + gestionNull(telefono) + ", " + "`fecha_nacimiento` = '" + fechaN + "', " + "`sexo` = '" + sexo + "', " + "`tipo` = '" + tipo + "'" + "WHERE `persona`.`nif` = " + "'" + nif + "'";
 
         if (DataValidation.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
-                ModelPersonas.getStmt().executeUpdate(consulta);
-                prepararBaseDatos();
+            ModelPersonas.getStmt().executeUpdate(consulta);
+            prepararBaseDatos();
         }
     }
+
     private void aniadirColumna() {
-        DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
-        tabla.addRow(new String[]{"", "", "", "", "", "", "", "", "", ""});
-        frPersonas.getScrollPane().getVerticalScrollBar().setValue(frPersonas.getScrollPane().getVerticalScrollBar().getMaximum());
-        esNuevaEntrada = true;
+        if (!esNuevaEntrada) {
+            DefaultTableModel tabla = (DefaultTableModel) frPersonas.getTable1().getModel();
+            tabla.addRow(new String[]{"", "", "", "", "", "", "", "", "", ""});
+            /*He necesitado usar un Thread porque sino visualmente la barra no bajaba hasta la última posición, sino la penúltima,
+             * de esta manera me aseguro que la función haya terminado de ejecutarse y posteriormente, ya con la última fila pintada,
+             * el programa baja hasta la última posición revelando la fila a rellenar.*/
+            Thread sleep = new Thread(() -> {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(200);
+                    frPersonas.getScrollPane().getVerticalScrollBar().setValue(frPersonas.getScrollPane().getVerticalScrollBar().getMaximum());
+                    frPersonas.getTable1().setRowSelectionInterval(frPersonas.getTable1().getRowCount() - 1, frPersonas.getTable1().getRowCount() - 1);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            sleep.start();
+            esNuevaEntrada = true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Ya hay una fila nueva creada");
+        }
     }
 
+
     private void aniadirEntrada(String nif, String nombre, String apellido1, String apellido2, String ciudad, String direccion, String telefono, String fechaN, String sexo, String tipo) throws SQLException {
-        String consulta = "INSERT INTO `persona` " +
-                "(`nif`, `nombre`, `apellido1`, `apellido2`, `ciudad`, `direccion`, `telefono`, `fecha_nacimiento`, `sexo`, `tipo`) " +
-                "VALUES ('" + nif + "', '" + nombre + "', '" + apellido1 + "', " + gestionNull(apellido2) + ", '" + ciudad + "', '" + direccion + "', " + gestionNull(telefono) + ", '" + fechaN + "', '" + sexo + "', '" + tipo + "')";
+        String consulta = "INSERT INTO `persona` " + "(`nif`, `nombre`, `apellido1`, `apellido2`, `ciudad`, `direccion`, `telefono`, `fecha_nacimiento`, `sexo`, `tipo`) " + "VALUES ('" + nif + "', '" + nombre + "', '" + apellido1 + "', " + gestionNull(apellido2) + ", '" + ciudad + "', '" + direccion + "', " + gestionNull(telefono) + ", '" + fechaN + "', '" + sexo + "', '" + tipo + "')";
 
         if (DataValidation.ComprobarDatosPersona(nif, nombre, apellido1, apellido2, ciudad, direccion, telefono, fechaN, sexo, tipo, frPersonas)) {
             ModelPersonas.getStmt().executeUpdate(consulta);
@@ -137,31 +155,13 @@ public class ControllerPersonas implements ActionListener, WindowListener {
             case "Guardar cambios" -> {
                 if (esNuevaEntrada && frPersonas.getTable1().getSelectedRow() == (frPersonas.getTable1().getRowCount() - 1)) {
                     try {
-                        aniadirEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9));
+                        aniadirEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9));
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else {
                     try {
-                        actualizarEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8),
-                                (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9));
+                        actualizarEntrada((String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 0), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 1), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 2), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 3), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 4), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 5), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 6), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 7), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 8), (String) frPersonas.getTable1().getValueAt(frPersonas.getTable1().getSelectedRow(), 9));
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }

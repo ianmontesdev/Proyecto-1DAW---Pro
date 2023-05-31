@@ -1,10 +1,15 @@
 package view.com.company;
+
 import javax.swing.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.company.FormatUI.*;
 
 public class ViewPersonas extends JFrame {
+    private final JMenuItem menuAniadir = new JMenuItem("Añadir nueva persona");
+    private final JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
+    private final JMenuItem menuEditar = new JMenuItem("Guardar cambios");
+    JPopupMenu popupMenu = new JPopupMenu();
     private JPanel ViewPersonas;
     private JTable table1;
     private JButton personasButton;
@@ -13,22 +18,17 @@ public class ViewPersonas extends JFrame {
     private JScrollPane ScrollPane;
     private JLabel buscarJLabel;
     private JPanel buttonsContainer;
-    JPopupMenu popupMenu = new JPopupMenu();
 
-    private final JMenuItem menuAniadir = new JMenuItem("Añadir nueva persona");
-    private final JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
-    private final JMenuItem menuEditar = new JMenuItem("Guardar cambios");
-
-    public ViewPersonas(){
+    public ViewPersonas() {
         super("Gestor universidad");
         setContentPane(ViewPersonas);
-        int ancho = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().width)/2;
-        int alto = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height)/2;
+        int ancho = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().width) / 2;
+        int alto = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height) / 2;
         setSize(ancho, alto);
-        setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2 - (ancho/2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2 - (alto/2)));
+        setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width / 2 - (ancho / 2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height / 2 - (alto / 2)));
 
-        Thread estilos = new Thread(() ->{
-            while(true){
+        Thread estilos = new Thread(() -> {
+            while (true) {
                 formatTable(table1);
                 formatSearch(campoBusqueda);
                 formatScrollPane(ScrollPane);
@@ -53,7 +53,9 @@ public class ViewPersonas extends JFrame {
         table1.setComponentPopupMenu(popupMenu);
     }
 
-    public JTable getTable1() {return table1;}
+    public JTable getTable1() {
+        return table1;
+    }
 
     public JButton getPersonasButton() {
         return personasButton;

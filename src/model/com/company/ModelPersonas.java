@@ -13,7 +13,7 @@ public class ModelPersonas {
 
     public ModelPersonas() {
         ConectionBD.openConn();
-        stmt =ConectionBD.getStmt();
+        stmt = ConectionBD.getStmt();
     }
 
     public static DefaultTableModel CargaDatos(DefaultTableModel m) {

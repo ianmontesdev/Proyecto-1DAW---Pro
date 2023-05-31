@@ -1,12 +1,15 @@
 package view.com.company;
 
 import javax.swing.*;
-
 import java.util.concurrent.TimeUnit;
 
 import static com.company.FormatUI.*;
 
 public class ViewAsignaturas extends JFrame {
+    private final JMenuItem menuAniadir = new JMenuItem("Añadir nueva asignatura");
+    private final JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
+    private final JMenuItem menuEditar = new JMenuItem("Guardar cambios");
+    JPopupMenu popupMenu = new JPopupMenu();
     private JPanel ViewAsignaturas;
     private JTable table1;
     private JButton personasButton;
@@ -15,22 +18,17 @@ public class ViewAsignaturas extends JFrame {
     private JScrollPane ScrollPane;
     private JLabel buscarJLabel;
     private JPanel buttonsContainer;
-    JPopupMenu popupMenu = new JPopupMenu();
 
-    private final JMenuItem menuAniadir = new JMenuItem("Añadir nueva asignatura");
-    private final JMenuItem menuEliminar = new JMenuItem("Eliminar de la BBDD");
-    private final JMenuItem menuEditar = new JMenuItem("Guardar cambios");
-
-    public ViewAsignaturas(){
+    public ViewAsignaturas() {
         super("Gestor universidad");
         setContentPane(ViewAsignaturas);
-        int ancho = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().width)/2;
-        int alto = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height)/2;
+        int ancho = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().width) / 2;
+        int alto = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height) / 2;
         setSize(ancho, alto);
-        setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2 - (ancho/2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2 - (alto/2)));
+        setLocation((java.awt.Toolkit.getDefaultToolkit().getScreenSize().width / 2 - (ancho / 2)), (java.awt.Toolkit.getDefaultToolkit().getScreenSize().height / 2 - (alto / 2)));
 
-        Thread estilos = new Thread(() ->{
-            while(true){
+        Thread estilos = new Thread(() -> {
+            while (true) {
                 formatTable(table1);
                 formatSearch(campoBusqueda);
                 formatScrollPane(ScrollPane);
@@ -54,7 +52,10 @@ public class ViewAsignaturas extends JFrame {
         popupMenu.add(menuEditar);
         table1.setComponentPopupMenu(popupMenu);
     }
-    public JTable getTable1() {return table1;}
+
+    public JTable getTable1() {
+        return table1;
+    }
 
     public JButton getPersonasButton() {
         return personasButton;
@@ -64,13 +65,21 @@ public class ViewAsignaturas extends JFrame {
         return asignaturasButton;
     }
 
-    public JMenuItem getMenuAniadir() {return menuAniadir;}
+    public JMenuItem getMenuAniadir() {
+        return menuAniadir;
+    }
 
-    public JMenuItem getMenuEliminar() {return menuEliminar;}
+    public JMenuItem getMenuEliminar() {
+        return menuEliminar;
+    }
 
-    public JMenuItem getMenuEditar() {return menuEditar;}
+    public JMenuItem getMenuEditar() {
+        return menuEditar;
+    }
 
-    public JTextField getCampoBusqueda() {return campoBusqueda;}
+    public JTextField getCampoBusqueda() {
+        return campoBusqueda;
+    }
 
     public JScrollPane getScrollPane() {
         return ScrollPane;
